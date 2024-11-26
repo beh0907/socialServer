@@ -8,12 +8,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
+import io.ktor.server.routing.application
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import org.koin.ktor.ext.inject
 
 fun Routing.authRoute() {
-    val repository by inject<UserRepository>()
+    val repository by application.inject<UserRepository>()
+
 
     route("/signUp") {
         post {

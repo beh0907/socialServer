@@ -15,9 +15,7 @@ class UserRepositoryImpl(
 ) : UserRepository {
     //회원가입
     override suspend fun signUp(params: SignUpParams): Response<AuthResponse> {
-        println("1")
         return if (userAlreadyExist(params.email)) {
-            println("2")
             Response.Error(
                 code = HttpStatusCode.Conflict,
                 data = AuthResponse(
@@ -25,10 +23,8 @@ class UserRepositoryImpl(
                 )
             )
         } else {
-            println("3")
             val insertUser = userDao.insert(params)
 
-            println("4")
             if (insertUser == null) {
                 Response.Error(
                     code = HttpStatusCode.InternalServerError,
@@ -37,7 +33,6 @@ class UserRepositoryImpl(
                     )
                 )
             } else {
-                println("5")
                 Response.Success(
                     data = AuthResponse(
                         data = AuthResponseData(
