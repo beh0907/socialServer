@@ -1,4 +1,4 @@
-package com.skymilk.repository.user
+package com.skymilk.repository.auth
 
 import com.skymilk.dao.user.UserDao
 import com.skymilk.model.AuthResponse
@@ -10,9 +10,9 @@ import com.skymilk.security.hashPassword
 import com.skymilk.util.Response
 import io.ktor.http.HttpStatusCode
 
-class UserRepositoryImpl(
+class AuthRepositoryImpl(
     private val userDao: UserDao,
-) : UserRepository {
+) : AuthRepository {
     //회원가입
     override suspend fun signUp(params: SignUpParams): Response<AuthResponse> {
         return if (userAlreadyExist(params.email)) {
@@ -36,12 +36,14 @@ class UserRepositoryImpl(
                 Response.Success(
                     data = AuthResponse(
                         data = AuthResponseData(
-                            seq = insertUser.seq,
+                            id = insertUser.id,
                             name = insertUser.name,
                             email = insertUser.email,
                             bio = insertUser.bio,
-                            avatar = insertUser.avatar,
-                            token = generateToken(params.email)
+                            imageUrl = insertUser.imageUrl,
+                            token = generateToken(params.email),
+                            followingCount = insertUser.followingCount,
+                            followersCount = insertUser.followersCount
                         )
                     )
                 )
@@ -62,6 +64,8 @@ class UserRepositoryImpl(
             )
         } else {
             val hashedPassword = hashPassword(params.password)
+            println("user.password : ${user.password}")
+            println("hashedPassword : $hashedPassword")
             if (user.password != hashedPassword) {
                 Response.Error(
                     code = HttpStatusCode.NotFound,
@@ -73,12 +77,14 @@ class UserRepositoryImpl(
                 Response.Success(
                     data = AuthResponse(
                         data = AuthResponseData(
-                            seq = user.seq,
+                            id = user.id,
                             name = user.name,
                             email = user.email,
                             bio = user.bio,
-                            avatar = user.avatar,
-                            token = generateToken(params.email)
+                            imageUrl = user.imageUrl,
+                            token = generateToken(params.email),
+                            followingCount = user.followingCount,
+                            followersCount = user.followersCount
                         )
                     )
                 )

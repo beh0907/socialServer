@@ -3,16 +3,17 @@ package com.skymilk.plugin
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.skymilk.model.AuthResponse
+import com.skymilk.util.GlobalEnvironment.getProperty
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.respond
 
-private const val jwtSecret = "social server secret"
-private const val jwtAudience = "jwt-audience"
-private const val jwtIssuer = "https://jwt-provider-domain/"
-private const val jwtRealm = "ktor social server"
+private val jwtSecret = getProperty("jwt.secret")
+private val jwtIssuer = getProperty("jwt.issuer")
+private val jwtAudience = getProperty("jwt.audience")
+private val jwtRealm = getProperty("jwt.realm")
 
 private const val CLAIM = "email"
 

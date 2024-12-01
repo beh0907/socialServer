@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.targets.js.npm.importedPackageDir
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -25,8 +26,6 @@ dependencies {
     implementation(libs.ktor.server.auth.jwt)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.exposed.core)
-    implementation(libs.exposed.jdbc)
     implementation(libs.h2)
     implementation(libs.postgresql)
     implementation(libs.koin.ktor)
@@ -37,6 +36,14 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 
+    //exposed
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.kotlin.datetime)
+
     //hikariCP
     implementation(libs.hikari.cp)
+
+    //SnowFlake
+    implementation(libs.snowflake.id)
 }
