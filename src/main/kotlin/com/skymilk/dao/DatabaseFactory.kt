@@ -28,7 +28,7 @@ object DatabaseFactory {
                 UserTable,
                 FollowsTable,
                 PostTable,
-                PostLikesTable
+//                PostLikesTable
             )
         }
     }
