@@ -2,8 +2,6 @@ package com.skymilk.dao.user
 
 import com.skymilk.dao.DatabaseFactory.dbQuery
 import com.skymilk.model.SignUpParams
-import com.skymilk.model.UserRow
-import com.skymilk.model.UserTable
 import com.skymilk.security.hashPassword
 import com.skymilk.util.IdGenerator
 import org.jetbrains.exposed.sql.ResultRow

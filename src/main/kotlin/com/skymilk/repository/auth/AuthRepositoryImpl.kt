@@ -2,7 +2,7 @@ package com.skymilk.repository.auth
 
 import com.skymilk.dao.user.UserDao
 import com.skymilk.model.AuthResponse
-import com.skymilk.model.AuthResponseData
+import com.skymilk.model.Auth
 import com.skymilk.model.SignInParams
 import com.skymilk.model.SignUpParams
 import com.skymilk.plugin.generateToken
@@ -35,7 +35,7 @@ class AuthRepositoryImpl(
             } else {
                 Response.Success(
                     data = AuthResponse(
-                        data = AuthResponseData(
+                        data = Auth(
                             id = insertUser.id,
                             name = insertUser.name,
                             email = insertUser.email,
@@ -76,7 +76,7 @@ class AuthRepositoryImpl(
             } else {
                 Response.Success(
                     data = AuthResponse(
-                        data = AuthResponseData(
+                        data = Auth(
                             id = user.id,
                             name = user.name,
                             email = user.email,

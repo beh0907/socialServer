@@ -2,6 +2,7 @@ package com.skymilk.route
 
 import com.skymilk.model.AuthResponse
 import com.skymilk.model.FollowsParams
+import com.skymilk.model.FollowsResponse
 import com.skymilk.repository.follows.FollowsRepository
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
@@ -26,8 +27,9 @@ fun Routing.followsRoute() {
                 if (params == null) {
                     call.respond(
                         status = HttpStatusCode.BadRequest,
-                        message = AuthResponse(
-                            errorMessage = "잘못된 인증 정보입니다."
+                        message = FollowsResponse(
+                            success = false,
+                            message = "잘못된 인증 정보입니다."
                         )
                     )
 

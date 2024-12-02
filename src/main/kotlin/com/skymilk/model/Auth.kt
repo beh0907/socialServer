@@ -17,12 +17,12 @@ data class SignInParams(
 
 @Serializable
 data class AuthResponse(
-    val data: AuthResponseData? = null,
+    val data: Auth? = null,
     val errorMessage: String? = null
 )
 
 @Serializable
-data class AuthResponseData(
+data class Auth(
     val id: Long,
     val name: String,
     val email: String,

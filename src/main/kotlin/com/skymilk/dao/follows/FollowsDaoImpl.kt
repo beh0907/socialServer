@@ -1,7 +1,6 @@
 package com.skymilk.dao.follows
 
 import com.skymilk.dao.DatabaseFactory.dbQuery
-import com.skymilk.model.FollowsTable
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
@@ -36,7 +35,7 @@ class FollowsDaoImpl : FollowsDao {
     ): List<Long> {
         return dbQuery {
             FollowsTable.selectAll()
-                .where { FollowsTable.followerId eq userId }
+                .where { FollowsTable.followingId eq userId }
                 .orderBy(FollowsTable.followDate, SortOrder.DESC)
                 .limit(pageSize)
                 .offset(((pageNumber - 1) * pageSize).toLong())
@@ -51,10 +50,18 @@ class FollowsDaoImpl : FollowsDao {
     ): List<Long> {
         return dbQuery {
             FollowsTable.selectAll()
-                .where { FollowsTable.followingId eq userId }
+                .where { FollowsTable.followerId eq userId }
                 .orderBy(FollowsTable.followDate, SortOrder.DESC)
                 .limit(pageSize)
                 .offset(((pageNumber - 1) * pageSize).toLong())
+                .map { it[FollowsTable.followingId] }
+        }
+    }
+
+    override suspend fun getAllFollowing(userId: Long): List<Long> {
+        return dbQuery {
+            FollowsTable.selectAll()
+                .where { FollowsTable.followingId eq userId }
                 .map { it[FollowsTable.followerId] }
         }
     }

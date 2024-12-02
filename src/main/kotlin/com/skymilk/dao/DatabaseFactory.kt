@@ -1,8 +1,9 @@
 package com.skymilk.dao
 
-import com.skymilk.model.FollowsTable
-import com.skymilk.model.UserTable
-import com.skymilk.util.GlobalEnvironment.environment
+import com.skymilk.dao.follows.FollowsTable
+import com.skymilk.dao.post.PostTable
+import com.skymilk.dao.postLikes.PostLikesTable
+import com.skymilk.dao.user.UserTable
 import com.skymilk.util.GlobalEnvironment.getProperty
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -25,7 +26,9 @@ object DatabaseFactory {
         transaction {
             SchemaUtils.create(
                 UserTable,
-                FollowsTable
+                FollowsTable,
+                PostTable,
+                PostLikesTable
             )
         }
     }
