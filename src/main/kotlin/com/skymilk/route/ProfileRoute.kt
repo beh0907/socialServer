@@ -41,7 +41,10 @@ fun Routing.profileRoute() {
                     val result = repository.getUserById(userId, currentUserId)
                     call.respond(status = result.code, message = result.data)
                 } catch (e: BadRequestException) {
-                    return@get
+                    call.respond(
+                        status = HttpStatusCode.BadRequest,
+                        message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
+                    )
                 } catch (t: Throwable) {
                     call.respond(
                         status = HttpStatusCode.InternalServerError,
@@ -100,11 +103,9 @@ fun Routing.profileRoute() {
                         status = HttpStatusCode.InternalServerError,
                         message = ProfileResponse(
                             success = false,
-                            message = "송신된 정보를 확인할 수 없습니다."
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-
-                    return@post
                 }
             }
         }

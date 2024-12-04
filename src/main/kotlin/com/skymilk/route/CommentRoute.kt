@@ -36,7 +36,7 @@ fun Routing.commentRoute() {
                             status = HttpStatusCode.BadRequest,
                             message = CommentResponse(
                                 success = false,
-                                message = "유효하지 않은 설정 정보입니다."
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
                         return@post
@@ -49,10 +49,9 @@ fun Routing.commentRoute() {
                         status = HttpStatusCode.InternalServerError,
                         message = CommentResponse(
                             success = false,
-                            message = "오류가 발생하였습니다. 다시 시도 해주세요."
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-                    return@post
                 }
             }
 
@@ -66,7 +65,7 @@ fun Routing.commentRoute() {
                             status = HttpStatusCode.BadRequest,
                             message = CommentResponse(
                                 success = false,
-                                message = "유효하지 않은 설정 정보입니다."
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
                         return@delete
@@ -82,7 +81,6 @@ fun Routing.commentRoute() {
                             message = "오류가 발생하였습니다. 다시 시도 해주세요."
                         )
                     )
-                    return@delete
                 }
             }
 
@@ -101,10 +99,9 @@ fun Routing.commentRoute() {
                         status = HttpStatusCode.InternalServerError,
                         message = CommentsResponse(
                             success = false,
-                            message = "오류가 발생하였습니다. 다시 시도 해주세요."
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-                    return@get
                 }
             }
         }

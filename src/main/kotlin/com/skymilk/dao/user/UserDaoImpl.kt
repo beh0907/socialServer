@@ -1,9 +1,11 @@
 package com.skymilk.dao.user
 
 import com.skymilk.dao.DatabaseFactory.dbQuery
+import com.skymilk.dao.user.UserTable.followersCount
 import com.skymilk.security.hashPassword
 import com.skymilk.util.IdGenerator
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -36,6 +38,7 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    //아이디로 유저 정보 가져오기
     override suspend fun findById(userId: Long): UserRow? {
         return dbQuery {
             UserTable.selectAll()
@@ -45,6 +48,7 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    //유저 정보 갱신
     override suspend fun updateUser(
         userId: Long,
         name: String,
@@ -67,7 +71,6 @@ class UserDaoImpl : UserDao {
         isFollower: Boolean,
     ): Boolean {
         return dbQuery {
-
             val count = if (isFollower) 1 else -1
 
             val followerQuery = UserTable.update({ UserTable.id eq follower }) {
@@ -79,6 +82,25 @@ class UserDaoImpl : UserDao {
             } > 0
 
             followerQuery && followingQuery
+        }
+    }
+
+    //조건에 해당하는 유저 목록 가져오기
+    override suspend fun getUsers(userIds: List<Long>): List<UserRow> {
+        return dbQuery {
+            UserTable.selectAll()
+                .where { UserTable.id inList userIds }
+                .map { rowToUser(it) }
+        }
+    }
+
+    //인기순 유저 목록 가져오기
+    override suspend fun getPopularUsers(limit: Int): List<UserRow> {
+        return dbQuery {
+            UserTable.selectAll()
+                .orderBy(followersCount, SortOrder.DESC)
+                .limit(limit)
+                .map { rowToUser(it) }
         }
     }
 

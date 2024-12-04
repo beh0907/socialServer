@@ -3,6 +3,7 @@ package com.skymilk.route
 import com.skymilk.model.LikeParams
 import com.skymilk.model.LikeResponse
 import com.skymilk.repository.postLikes.PostLikesRepository
+import com.skymilk.util.Constants
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.auth.authenticate
 import io.ktor.server.request.receiveNullable
@@ -32,7 +33,7 @@ fun Routing.postLikesRoute() {
                             status = HttpStatusCode.BadRequest,
                             message = LikeResponse(
                                 success = false,
-                                message = "유효하지 않은 설정 정보입니다."
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
 
@@ -47,10 +48,9 @@ fun Routing.postLikesRoute() {
                         status = HttpStatusCode.InternalServerError,
                         message = LikeResponse(
                             success = false,
-                            message = "오류가 발생하였습니다. 다시 시도 해주세요."
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-                    return@post
                 }
             }
 
@@ -65,10 +65,9 @@ fun Routing.postLikesRoute() {
                             status = HttpStatusCode.BadRequest,
                             message = LikeResponse(
                                 success = false,
-                                message = "유효하지 않은 설정 정보입니다."
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
-
                         return@post
                     }
 
@@ -80,10 +79,9 @@ fun Routing.postLikesRoute() {
                         status = HttpStatusCode.InternalServerError,
                         message = LikeResponse(
                             success = false,
-                            message = "오류가 발생하였습니다. 다시 시도 해주세요."
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
                         )
                     )
-                    return@post
                 }
             }
 

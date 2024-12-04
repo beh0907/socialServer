@@ -15,4 +15,10 @@ interface UserDao {
 
     //팔로우 수 갱신
     suspend fun updateFollowsCount(follower: Long, followed: Long, isFollower: Boolean): Boolean
+
+    //조건 유저 목록 가져오기
+    suspend fun getUsers(userIds: List<Long>): List<UserRow>
+
+    //인기 있는 유저 목록 가져오기
+    suspend fun getPopularUsers(limit: Int): List<UserRow>
 }

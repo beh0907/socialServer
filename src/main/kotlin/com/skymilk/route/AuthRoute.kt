@@ -4,6 +4,7 @@ import com.skymilk.model.AuthResponse
 import com.skymilk.model.SignInParams
 import com.skymilk.model.SignUpParams
 import com.skymilk.repository.auth.AuthRepository
+import com.skymilk.util.Constants
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
@@ -26,7 +27,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "유효하지 않은 인증 정보입니다."
+                        errorMessage = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                     )
                 )
 
@@ -48,7 +49,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "유효하지 않은 인증 정보입니다."
+                        errorMessage = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                     )
                 )
 
