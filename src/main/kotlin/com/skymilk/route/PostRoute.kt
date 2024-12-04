@@ -35,7 +35,7 @@ fun Routing.postRoute() {
             //게시글 생성 라우트
             post("/create") {
                 var fileName = ""
-                var param: PostParam? = null
+                var params: PostParam? = null
                 var multiPart = call.receiveMultipart()
 
                 //multiPart 처리
@@ -49,7 +49,7 @@ fun Routing.postRoute() {
                         //작성 데이터라면 파라미터 역직렬화
                         is PartData.FormItem -> {
                             if (partData.name == "post_data") {
-                                param = Json.decodeFromString(partData.value)
+                                params = Json.decodeFromString(partData.value)
                             }
                         }
 
@@ -64,7 +64,7 @@ fun Routing.postRoute() {
                 val imageUrl = "${Constants.BASE_URL}${Constants.POST_IMAGES_FOLDER}$fileName"
 
                 //파라미터를 확인할 수 없다면 저장된 이미지 제거
-                if (param == null) {
+                if (params == null) {
                     deleteFile("${Constants.POST_IMAGES_FOLDER_PATH}$/$fileName")
 
                     call.respond(
@@ -78,7 +78,7 @@ fun Routing.postRoute() {
                     return@post
                 } else {
                     //게시물 생성 후 리턴
-                    val result = repository.createPost(imageUrl, param!!)
+                    val result = repository.createPost(imageUrl, params!!)
                     call.respond(
                         status = result.code,
                         message = result.data

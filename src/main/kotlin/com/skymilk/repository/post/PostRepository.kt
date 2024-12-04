@@ -8,7 +8,7 @@ import com.skymilk.util.Response
 interface PostRepository {
 
     //게시글 작성
-    suspend fun createPost(imageUrl: String, param: PostParam): Response<PostResponse>
+    suspend fun createPost(imageUrl: String, params: PostParam): Response<PostResponse>
 
     //팔로워 게시글 목록 가져오기
     suspend fun getFeedsPost(userId: Long, pageNumber: Int, pageSize: Int): Response<PostsResponse>

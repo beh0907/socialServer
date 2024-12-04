@@ -29,7 +29,7 @@ fun Routing.followsRoute() {
                         status = HttpStatusCode.BadRequest,
                         message = FollowsResponse(
                             success = false,
-                            message = "잘못된 인증 정보입니다."
+                            message = "유효하지 않은 설정 정보입니다."
                         )
                     )
 

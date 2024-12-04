@@ -18,9 +18,9 @@ class PostRepositoryImpl(
 ) : PostRepository {
     override suspend fun createPost(
         imageUrl: String,
-        param: PostParam,
+        params: PostParam,
     ): Response<PostResponse> {
-        val postIsCreated = postDao.createPost(caption = param.caption, imageUrl = imageUrl, userId = param.userId)
+        val postIsCreated = postDao.createPost(caption = params.caption, imageUrl = imageUrl, userId = params.userId)
 
         return if (postIsCreated) {
             Response.Success(data = PostResponse(success = true))

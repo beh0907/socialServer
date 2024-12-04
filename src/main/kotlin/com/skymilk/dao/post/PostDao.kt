@@ -17,4 +17,9 @@ interface PostDao {
     //게시글 가져오기
     suspend fun deletePost(postId: Long): Boolean
 
+    //댓글 수 갱신
+    suspend fun updateCommentsCount(postId: Long, decrement: Boolean = false): Boolean
+
+    //좋아요 수 갱신
+    suspend fun updateLikesCount(postId: Long, decrement: Boolean = false): Boolean
 }

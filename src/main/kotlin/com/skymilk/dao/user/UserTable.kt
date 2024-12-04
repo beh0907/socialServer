@@ -6,7 +6,7 @@ object UserTable: Table(name = "users") {
     val id = long(name = "user_id").autoIncrement()
     val name = varchar("user_name", 255)
     val email = varchar("user_email", 255)
-    val bio = text("user_bio").default("안녕하십니까! SocialApp에 오신 것을 환영합니다.")
+    val bio = text("user_bio").default("안녕하십니까! 저의 소셜 페이지에 오신 것을 환영합니다.")
     val password = varchar("user_password", 100)
     val imageUrl = text("image_url").nullable()
     val followersCount = integer("followers_count").default(0)

@@ -2,6 +2,7 @@ package com.skymilk.dao
 
 import com.skymilk.dao.follows.FollowsTable
 import com.skymilk.dao.post.PostTable
+import com.skymilk.dao.postComments.PostCommentsTable
 import com.skymilk.dao.postLikes.PostLikesTable
 import com.skymilk.dao.user.UserTable
 import com.skymilk.util.GlobalEnvironment.getProperty
@@ -28,7 +29,8 @@ object DatabaseFactory {
                 UserTable,
                 FollowsTable,
                 PostTable,
-//                PostLikesTable
+                PostLikesTable,
+                PostCommentsTable
             )
         }
     }

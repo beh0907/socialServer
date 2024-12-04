@@ -1,25 +1,23 @@
 package com.skymilk.dao.user
 
 import com.skymilk.dao.DatabaseFactory.dbQuery
-import com.skymilk.model.SignUpParams
 import com.skymilk.security.hashPassword
 import com.skymilk.util.IdGenerator
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.update
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 
 class UserDaoImpl : UserDao {
-
     //유저 정보 추가
-    override suspend fun insert(params: SignUpParams): UserRow? {
+    override suspend fun insert(name: String, email: String, password: String): UserRow? {
         return dbQuery {
             val insertStatement = UserTable.insert {
                 it[id] = IdGenerator.generateId()
-                it[name] = params.name
-                it[email] = params.email
-                it[password] = hashPassword(params.password)
+                it[UserTable.name] = name
+                it[UserTable.email] = email
+                it[UserTable.password] = hashPassword(password)
             }
 
             insertStatement.resultedValues?.singleOrNull()?.let {
@@ -38,6 +36,30 @@ class UserDaoImpl : UserDao {
         }
     }
 
+    override suspend fun findById(userId: Long): UserRow? {
+        return dbQuery {
+            UserTable.selectAll()
+                .where { UserTable.id eq userId }
+                .map { rowToUser(it) }
+                .singleOrNull()
+        }
+    }
+
+    override suspend fun updateUser(
+        userId: Long,
+        name: String,
+        bio: String,
+        imageUrl: String?,
+    ): Boolean {
+        return dbQuery {
+            UserTable.update({ UserTable.id eq userId }) {
+                it[UserTable.name] = name
+                it[UserTable.bio] = bio
+                it[UserTable.imageUrl] = imageUrl
+            } > 0
+        }
+    }
+
     //팔로우 여부에 따라 카운트 수정
     override suspend fun updateFollowsCount(
         follower: Long,
@@ -48,11 +70,11 @@ class UserDaoImpl : UserDao {
 
             val count = if (isFollower) 1 else -1
 
-            val followerQuery = UserTable.update({UserTable.id eq follower}) {
+            val followerQuery = UserTable.update({ UserTable.id eq follower }) {
                 it.update(column = followingCount, value = followingCount.plus(count))
             } > 0
 
-            val followingQuery = UserTable.update({UserTable.id eq following}) {
+            val followingQuery = UserTable.update({ UserTable.id eq following }) {
                 it.update(column = followersCount, value = followersCount.plus(count))
             } > 0
 

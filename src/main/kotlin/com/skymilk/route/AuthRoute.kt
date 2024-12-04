@@ -26,7 +26,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "잘못된 인증 정보입니다."
+                        errorMessage = "유효하지 않은 인증 정보입니다."
                     )
                 )
 
@@ -48,7 +48,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = "잘못된 인증 정보입니다."
+                        errorMessage = "유효하지 않은 인증 정보입니다."
                     )
                 )
 

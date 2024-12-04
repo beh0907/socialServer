@@ -1,8 +1,8 @@
 package com.skymilk.repository.auth
 
 import com.skymilk.dao.user.UserDao
-import com.skymilk.model.AuthResponse
 import com.skymilk.model.Auth
+import com.skymilk.model.AuthResponse
 import com.skymilk.model.SignInParams
 import com.skymilk.model.SignUpParams
 import com.skymilk.plugin.generateToken
@@ -23,7 +23,7 @@ class AuthRepositoryImpl(
                 )
             )
         } else {
-            val insertUser = userDao.insert(params)
+            val insertUser = userDao.insert(params.name, params.email, params.password)
 
             if (insertUser == null) {
                 Response.Error(
