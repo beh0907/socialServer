@@ -35,7 +35,7 @@ fun Routing.profileRoute() {
             get("/{userId}") {
                 try {
                     val userId = call.getLongParameter(name = "userId")
-                    val currentUserId = call.getLongParameter(name = "currentUserId", isQueryParameter = true)
+                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
 
                     //결과 리턴
                     val result = repository.getUserById(userId, currentUserId)

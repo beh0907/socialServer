@@ -27,7 +27,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
+                        message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                     )
                 )
 
@@ -49,7 +49,7 @@ fun Routing.authRoute() {
                 call.respond(
                     status = HttpStatusCode.BadRequest,
                     message = AuthResponse(
-                        errorMessage = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
+                        message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                     )
                 )
 

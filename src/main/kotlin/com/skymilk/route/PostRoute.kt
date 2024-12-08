@@ -91,7 +91,7 @@ fun Routing.postRoute() {
                 try {
                     //파라미터 확인
                     val postId = call.getLongParameter(name = "postId")
-                    val currentUserId = call.getLongParameter(name = "currentUserId", isQueryParameter = true)
+                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
 
                     //게시글 가져오기
                     val result = repository.getPost(postId, currentUserId)
@@ -144,7 +144,7 @@ fun Routing.postRoute() {
             //피드 목록
             get("/feed") {
                 try {
-                    val currentUserId = call.getLongParameter(name = "currentUserId", isQueryParameter = true)
+                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
                     val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 0
                     val limit =
                         call.request.queryParameters["limit"]?.toIntOrNull() ?: Constants.DEFAULT_PAGINATION_PAGE_SIZE
@@ -171,7 +171,7 @@ fun Routing.postRoute() {
             get("/{userId}") {
                 try {
                     val postsOwnerId = call.getLongParameter(name = "userId")
-                    val currentUserId = call.getLongParameter(name = "currentUserId", isQueryParameter = true)
+                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
                     val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 0
                     val limit =
                         call.request.queryParameters["limit"]?.toIntOrNull() ?: Constants.DEFAULT_PAGINATION_PAGE_SIZE

@@ -18,7 +18,7 @@ data class SignInParams(
 @Serializable
 data class AuthResponse(
     val data: Auth? = null,
-    val errorMessage: String? = null
+    val message: String? = null
 )
 
 @Serializable

@@ -25,4 +25,5 @@ object Constants {
     const val PAGE_NUMBER_PARAMETER = "page"
     const val PAGE_LIMIT_PARAMETER = "limit"
     const val USER_ID_PARAMETER = "userId"
+    const val CURRENT_USER_ID_PARAMETER = "currentUserId"
 }

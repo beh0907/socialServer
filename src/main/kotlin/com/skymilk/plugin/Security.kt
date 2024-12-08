@@ -33,15 +33,19 @@ fun Application.configureSecurity() {
             )
 
             validate { credential ->
-                if (credential.payload.getClaim(CLAIM).asString() != null) {
+                val email = credential.payload.getClaim(CLAIM).asString()
+                if (email != null) {
+                    // 토큰 만료 여부 확인
+//                    val isTokenExpired = credential.payload.expiresAt?.let { it.time < System.currentTimeMillis() } ?: false
+
                     //토큰 페이로드 내 이메일이 DB에 저장 여부 체크
-                    val userExists = userDao.findByEmail(email = credential.payload.getClaim(CLAIM).asString()) != null
+                    val userExists = userDao.findByEmail(email = email) != null
 
                     //토큰 페이로드 내 audience값이 일치 여부 체크
                     val isValidAudience = credential.payload.audience.contains(jwtAudience)
 
                     //정상 토큰 여부 확인
-                    if (userExists && isValidAudience) {
+                    if (userExists && isValidAudience /*&& !isTokenExpired*/) {
                         JWTPrincipal(payload = credential.payload)
                     } else {
                         null
@@ -54,7 +58,7 @@ fun Application.configureSecurity() {
             challenge { _, _ ->
                 call.respond(
                     HttpStatusCode.Unauthorized,
-                    message = AuthResponse(errorMessage = "토큰이 유효하지 않거나 만료되었습니다.")
+                    message = AuthResponse(message = "토큰이 유효하지 않거나 만료되었습니다.")
                 )
             }
         }
@@ -66,7 +70,7 @@ fun generateToken(email: String): String {
         .withAudience(jwtAudience)
         .withIssuer(jwtIssuer)
         .withClaim(CLAIM, email)
-//        .withExpiresAt()
+//        .withExpiresAt(Date.from(Instant.now().plusSeconds(24 * 60 * 60))) // 24시간 후 만료
         .sign(Algorithm.HMAC256(jwtSecret))
 
 }

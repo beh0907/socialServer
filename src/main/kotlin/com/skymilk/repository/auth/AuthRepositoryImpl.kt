@@ -19,7 +19,7 @@ class AuthRepositoryImpl(
             Response.Error(
                 code = HttpStatusCode.Conflict,
                 data = AuthResponse(
-                    errorMessage = "이미 가입된 이메일입니다."
+                    message = "이미 가입된 이메일입니다."
                 )
             )
         } else {
@@ -29,7 +29,7 @@ class AuthRepositoryImpl(
                 Response.Error(
                     code = HttpStatusCode.InternalServerError,
                     data = AuthResponse(
-                        errorMessage = "계정 생성을 실패하였습니다. 다시 시도 해주세요."
+                        message = "계정 생성을 실패하였습니다. 다시 시도 해주세요."
                     )
                 )
             } else {
@@ -59,18 +59,16 @@ class AuthRepositoryImpl(
             Response.Error(
                 code = HttpStatusCode.NotFound,
                 data = AuthResponse(
-                    errorMessage = "등록되지 않은 이메일입니다."
+                    message = "등록되지 않은 이메일입니다."
                 )
             )
         } else {
             val hashedPassword = hashPassword(params.password)
-            println("user.password : ${user.password}")
-            println("hashedPassword : $hashedPassword")
             if (user.password != hashedPassword) {
                 Response.Error(
                     code = HttpStatusCode.NotFound,
                     data = AuthResponse(
-                        errorMessage = "비밀번호가 일치하지 않습니다."
+                        message = "비밀번호가 일치하지 않습니다."
                     )
                 )
             } else {
