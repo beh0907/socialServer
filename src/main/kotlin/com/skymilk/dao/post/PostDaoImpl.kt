@@ -19,10 +19,12 @@ class PostDaoImpl : PostDao {
         caption: String,
         imageUrl: String,
         userId: Long,
-    ): Boolean {
+    ): PostRow? {
         return dbQuery {
+            val postId = IdGenerator.generateId()
+
             val insertStatement = PostTable.insert {
-                it[postId] = IdGenerator.generateId()
+                it[PostTable.postId] = postId
                 it[PostTable.caption] = caption
                 it[PostTable.imageUrl] = imageUrl
                 it[likesCount] = 0
@@ -30,7 +32,12 @@ class PostDaoImpl : PostDao {
                 it[PostTable.userId] = userId
             }
 
-            insertStatement.resultedValues?.singleOrNull() != null
+            insertStatement.resultedValues?.singleOrNull()?.let {
+                getJoinUserToPostTable().selectAll()
+                    .where { PostTable.postId eq postId }
+                    .singleOrNull()
+                    ?.let { toPostRow(it) }
+            }
         }
     }
 

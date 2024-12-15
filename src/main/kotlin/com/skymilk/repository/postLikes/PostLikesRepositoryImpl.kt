@@ -12,7 +12,7 @@ class PostLikesRepositoryImpl(
     private val postDao: PostDao,
 ) : PostLikesRepository {
     override suspend fun addLike(params: LikeParams): Response<LikeResponse> {
-        val likeExists = postLikesDao.isPostLikeByUser(params.postId, params.userId)
+        val likeExists = postLikesDao.isPostLikeByUser(params.userId, params.postId)
 
         return if (likeExists) {
             Response.Error(
@@ -36,7 +36,10 @@ class PostLikesRepositoryImpl(
     }
 
     override suspend fun removeLike(params: LikeParams): Response<LikeResponse> {
-        val likeExists = postLikesDao.isPostLikeByUser(params.postId, params.userId)
+        val likeExists = postLikesDao.isPostLikeByUser(params.userId, params.postId)
+
+        println("likeExists : $likeExists")
+        println("params : $params")
 
         return if (likeExists) {
             //좋아요 제거

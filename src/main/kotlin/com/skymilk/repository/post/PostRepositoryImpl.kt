@@ -16,14 +16,24 @@ class PostRepositoryImpl(
     private val postLikesDao: PostLikesDao,
     private val followsDao: FollowsDao,
 ) : PostRepository {
+
     override suspend fun createPost(
         imageUrl: String,
         params: PostParam,
     ): Response<PostResponse> {
-        val postIsCreated = postDao.createPost(caption = params.caption, imageUrl = imageUrl, userId = params.userId)
+        val createdPost = postDao.createPost(caption = params.caption, imageUrl = imageUrl, userId = params.userId)
 
-        return if (postIsCreated) {
-            Response.Success(data = PostResponse(success = true))
+        return if (createdPost != null) {
+            Response.Success(
+                data = PostResponse(
+                    success = true,
+                    post = toPost(
+                        postRow = createdPost,
+                        isPostLiked = false,
+                        isOwnPost = true
+                    )
+                )
+            )
         } else {
             Response.Error(
                 code = HttpStatusCode.InternalServerError,
@@ -47,7 +57,7 @@ class PostRepositoryImpl(
         val posts = postsRows.map { postRow ->
             toPost(
                 postRow = postRow,
-                isPostLiked = postLikesDao.isPostLikeByUser(postRow.postId, userId),
+                isPostLiked = postLikesDao.isPostLikeByUser(userId, postRow.postId),
                 isOwnPost = postRow.userId == userId
             )
         }
@@ -67,7 +77,7 @@ class PostRepositoryImpl(
         val posts = postsRows.map { postRow ->
             toPost(
                 postRow = postRow,
-                isPostLiked = postLikesDao.isPostLikeByUser(postRow.postId, currentUserId),
+                isPostLiked = postLikesDao.isPostLikeByUser(currentUserId, postRow.postId),
                 isOwnPost = postRow.userId == currentUserId
             )
         }
@@ -90,7 +100,7 @@ class PostRepositoryImpl(
                 )
             )
         } else {
-            val isPostLiked = postLikesDao.isPostLikeByUser(postId, currentUserId)
+            val isPostLiked = postLikesDao.isPostLikeByUser(currentUserId, postId)
             val isOwnPost = post.userId == currentUserId
 
             Response.Success(

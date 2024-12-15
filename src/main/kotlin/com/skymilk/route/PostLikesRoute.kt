@@ -10,6 +10,7 @@ import io.ktor.server.request.receiveNullable
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Routing
 import io.ktor.server.routing.application
+import io.ktor.server.routing.delete
 import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import org.koin.ktor.ext.inject
@@ -55,7 +56,7 @@ fun Routing.postLikesRoute() {
             }
 
             //좋아요 제거
-            post(path = "/remove") {
+            delete(path = "/remove") {
                 try {
                     val params = call.receiveNullable<LikeParams>()
 
@@ -68,7 +69,7 @@ fun Routing.postLikesRoute() {
                                 message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
-                        return@post
+                        return@delete
                     }
 
                     //좋아요 제거 여부 리턴
