@@ -38,9 +38,6 @@ class PostLikesRepositoryImpl(
     override suspend fun removeLike(params: LikeParams): Response<LikeResponse> {
         val likeExists = postLikesDao.isPostLikeByUser(params.userId, params.postId)
 
-        println("likeExists : $likeExists")
-        println("params : $params")
-
         return if (likeExists) {
             //좋아요 제거
             val likeRemoved = postLikesDao.removeLike(params.userId, params.postId)

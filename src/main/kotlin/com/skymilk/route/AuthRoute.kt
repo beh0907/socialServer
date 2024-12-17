@@ -18,8 +18,8 @@ fun Routing.authRoute() {
     val repository by application.inject<AuthRepository>()
 
 
-    route("/signUp") {
-        post {
+    route("/auth") {
+        post("/signUp") {
             val params = call.receiveNullable<SignUpParams>()
 
             //파라미터가 다르다면
@@ -38,10 +38,8 @@ fun Routing.authRoute() {
             val result = repository.signUp(params = params)
             call.respond(result.code, result.data)
         }
-    }
 
-    route("/signIn") {
-        post {
+        post("/signIn") {
             val params = call.receiveNullable<SignInParams>()
 
             //파라미터가 다르다면

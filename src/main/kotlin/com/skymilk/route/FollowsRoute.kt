@@ -22,40 +22,39 @@ fun Routing.followsRoute() {
 
     //인증 처리된 유저만 접근할 수 있다
     authenticate {
+
         route(path = "/follows") {
             //팔로우
             post("/follow") {
-                post {
-                    try {
-                        val params = call.receiveNullable<FollowsParams>()
+                try {
+                    val params = call.receiveNullable<FollowsParams>()
 
-                        //파라미터가 다르다면
-                        if (params == null) {
-                            call.respond(
-                                status = HttpStatusCode.BadRequest,
-                                message = FollowResponse(
-                                    success = false,
-                                    message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
-                                )
-                            )
-
-                            return@post
-                        }
-
-                        //팔로우 처리
-                        val result = repository.followUser(params = params)
-
-                        //결과 리턴
-                        call.respond(result.code, result.data)
-                    } catch (e: Throwable) {
+                    //파라미터가 다르다면
+                    if (params == null) {
                         call.respond(
-                            status = HttpStatusCode.InternalServerError,
+                            status = HttpStatusCode.BadRequest,
                             message = FollowResponse(
                                 success = false,
-                                message = Constants.UNEXPECTED_ERROR_MESSAGE
+                                message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                             )
                         )
+
+                        return@post
                     }
+
+                    //팔로우 처리
+                    val result = repository.followUser(params = params)
+
+                    //결과 리턴
+                    call.respond(result.code, result.data)
+                } catch (e: Throwable) {
+                    call.respond(
+                        status = HttpStatusCode.InternalServerError,
+                        message = FollowResponse(
+                            success = false,
+                            message = Constants.UNEXPECTED_ERROR_MESSAGE
+                        )
+                    )
                 }
             }
 

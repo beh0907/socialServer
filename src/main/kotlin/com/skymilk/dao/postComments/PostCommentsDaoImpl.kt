@@ -1,8 +1,6 @@
 package com.skymilk.dao.postComments
 
 import com.skymilk.dao.DatabaseFactory.dbQuery
-import com.skymilk.dao.follows.FollowsTable
-import com.skymilk.dao.post.PostTable
 import com.skymilk.dao.user.UserTable
 import com.skymilk.util.IdGenerator
 import org.jetbrains.exposed.sql.Join
@@ -49,12 +47,14 @@ class PostCommentsDaoImpl : PostCommentsDao {
         commentId: Long,
         postId: Long,
     ): PostCommentRow? {
-        return dbQuery {
-            getJoinUserToPostCommentsTable().selectAll()
-                .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
-                .singleOrNull()
-                ?.let { toPostCommentRow(it) }
-        }
+        val result = getJoinUserToPostCommentsTable().selectAll()
+            .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
+            .singleOrNull()
+            ?.let {
+                toPostCommentRow(it)
+            }
+
+        return result
     }
 
     override suspend fun getComments(
