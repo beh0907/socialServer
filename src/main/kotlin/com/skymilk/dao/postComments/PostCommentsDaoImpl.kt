@@ -31,7 +31,14 @@ class PostCommentsDaoImpl : PostCommentsDao {
             }
 
             //삽입된 댓글 리턴
-            findComment(commentId, postId)
+            val result = getJoinUserToPostCommentsTable().selectAll()
+                .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
+                .singleOrNull()
+                ?.let {
+                    toPostCommentRow(it)
+                }
+
+            result
         }
     }
 
@@ -47,14 +54,16 @@ class PostCommentsDaoImpl : PostCommentsDao {
         commentId: Long,
         postId: Long,
     ): PostCommentRow? {
-        val result = getJoinUserToPostCommentsTable().selectAll()
-            .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
-            .singleOrNull()
-            ?.let {
-                toPostCommentRow(it)
-            }
+        return dbQuery {
+            val result = getJoinUserToPostCommentsTable().selectAll()
+                .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
+                .singleOrNull()
+                ?.let {
+                    toPostCommentRow(it)
+                }
 
-        return result
+            result
+        }
     }
 
     override suspend fun getComments(

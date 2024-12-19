@@ -72,7 +72,7 @@ class PostCommentsRepositoryImpl(
                         code = HttpStatusCode.Conflict,
                         data = CommentResponse(
                             success = false,
-                            message = "Comment ${params.commentId} could not be removed"
+                            message = "댓글 ${params.commentId}를 삭제할 수 없습니다."
                         )
                     )
                 }

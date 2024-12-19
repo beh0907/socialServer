@@ -43,6 +43,9 @@ fun Routing.commentRoute() {
                     }
 
                     val result = repository.addComment(params = params)
+                    println(1111111111)
+                    println(result.code)
+                    println(result.data)
                     call.respond(status = result.code, message = result.data)
                 } catch (e: Throwable) {
                     call.respond(
@@ -72,6 +75,9 @@ fun Routing.commentRoute() {
                     }
 
                     val result = repository.removeComment(params = params)
+                    println(44444444444444)
+                    println(result.code)
+                    println(result.data)
                     call.respond(status = result.code, message = result.data)
                 } catch (error: Throwable) {
                     call.respond(
