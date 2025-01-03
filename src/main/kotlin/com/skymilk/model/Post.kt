@@ -10,6 +10,13 @@ data class PostResponse(
 )
 
 @Serializable
+data class PostUpdateResponse(
+    val success: Boolean,
+    val imageUrl: String? = null,
+    val message: String? = null,
+)
+
+@Serializable
 data class PostsResponse(
     val success: Boolean,
     val posts: List<Post> = emptyList(),
@@ -20,6 +27,14 @@ data class PostsResponse(
 data class PostParam(
     val caption: String,
     val userId: Long,
+)
+
+@Serializable
+data class PostUpdateParam(
+    val caption: String,
+    val imageUrl: String,
+    val userId: Long,
+    val postId: Long,
 )
 
 

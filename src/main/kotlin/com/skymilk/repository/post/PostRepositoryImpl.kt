@@ -7,6 +7,7 @@ import com.skymilk.dao.postLikes.PostLikesDao
 import com.skymilk.model.Post
 import com.skymilk.model.PostParam
 import com.skymilk.model.PostResponse
+import com.skymilk.model.PostUpdateParam
 import com.skymilk.model.PostsResponse
 import com.skymilk.util.Response
 import io.ktor.http.HttpStatusCode
@@ -40,6 +41,30 @@ class PostRepositoryImpl(
                 data = PostResponse(
                     success = false,
                     message = "게시글을 추가하지 못하였습니다. 다시 시도해주세요."
+                )
+            )
+        }
+    }
+
+    override suspend fun updatePost(
+        imageUrl: String,
+        params: PostUpdateParam,
+    ): Response<PostResponse> {
+        val updatedPost = postDao.updatePost(
+            caption = params.caption,
+            imageUrl = imageUrl,
+            userId = params.userId,
+            postId = params.postId
+        )
+
+        return if (updatedPost) {
+            Response.Success(data = PostResponse(success = true))
+        } else {
+            Response.Error(
+                code = HttpStatusCode.InternalServerError,
+                data = PostResponse(
+                    success = false,
+                    message = "게시글을 수정하지 못하였습니다. 다시 시도해주세요."
                 )
             )
         }

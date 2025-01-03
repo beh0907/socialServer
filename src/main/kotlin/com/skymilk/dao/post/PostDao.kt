@@ -5,6 +5,9 @@ interface PostDao {
     //게시글 작성
     suspend fun createPost(caption: String, imageUrl: String, userId: Long): PostRow?
 
+    //게시글 수정
+    suspend fun updatePost(caption: String, imageUrl: String, userId: Long, postId: Long): Boolean
+
     //팔로워 게시글 목록 가져오기
     suspend fun getFeedsPost(userId: Long, follows: List<Long>, pageNumber: Int, pageSize: Int): List<PostRow>
 
@@ -14,7 +17,7 @@ interface PostDao {
     //게시글 가져오기
     suspend fun getPost(postId: Long): PostRow?
 
-    //게시글 가져오기
+    //게시글 삭제하기
     suspend fun deletePost(postId: Long): Boolean
 
     //댓글 수 갱신

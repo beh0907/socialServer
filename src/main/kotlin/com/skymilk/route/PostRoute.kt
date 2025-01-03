@@ -2,6 +2,7 @@ package com.skymilk.route
 
 import com.skymilk.model.PostParam
 import com.skymilk.model.PostResponse
+import com.skymilk.model.PostUpdateParam
 import com.skymilk.model.PostsResponse
 import com.skymilk.repository.post.PostRepository
 import com.skymilk.util.Constants
@@ -86,12 +87,71 @@ fun Routing.postRoute() {
                 }
             }
 
+            //게시글 수정 라우트
+            post("/update") {
+                var fileName = ""
+                var params: PostUpdateParam? = null
+                var multiPart = call.receiveMultipart()
+
+                //multiPart 처리
+                multiPart.forEachPart { partData ->
+                    when (partData) {
+                        //이미지라면 저장
+                        is PartData.FileItem -> {
+                            fileName = partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH)
+                        }
+
+                        //작성 데이터라면 파라미터 역직렬화
+                        is PartData.FormItem -> {
+                            if (partData.name == "post_data") {
+                                params = Json.decodeFromString(partData.value)
+                            }
+                        }
+
+                        else -> Unit
+                    }
+
+                    //사용된 PartData 처리
+                    partData.dispose()
+                }
+
+                //저장된 이미지 경로 설정
+                //선택된 이미지가 없다면 null을 전달해 이미지 경로를 갱신하지 않는다
+                val imageUrl = "${Constants.BASE_URL}${Constants.POST_IMAGES_FOLDER}$fileName"
+
+                //파라미터를 확인할 수 없다면 저장된 이미지 제거
+                if (params == null) {
+                    deleteFile("${Constants.POST_IMAGES_FOLDER_PATH}$/$fileName")
+
+                    call.respond(
+                        status = HttpStatusCode.BadRequest,
+                        message = PostResponse(
+                            success = false,
+                            message = "입력된 게시물 정보를 확인할 수 없습니다."
+                        )
+                    )
+
+                    return@post
+                } else {
+                    //게시물 갱신 후 리턴
+                    val result = repository.updatePost(imageUrl = imageUrl, params = params!!.copy(
+                        //저장된 이미지가 없다면 기존 값 반영
+                        imageUrl = if (fileName.isBlank()) params!!.imageUrl else imageUrl
+                    ))
+                    call.respond(
+                        status = result.code,
+                        message = result.data
+                    )
+                }
+            }
+
             //게시글 조회 라우트
             get("/{postId}") {
                 try {
                     //파라미터 확인
                     val postId = call.getLongParameter(name = "postId")
-                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
+                    val currentUserId =
+                        call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
 
                     //게시글 가져오기
                     val result = repository.getPost(postId, currentUserId)
@@ -144,7 +204,8 @@ fun Routing.postRoute() {
             //피드 목록
             get("/feed") {
                 try {
-                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
+                    val currentUserId =
+                        call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
                     val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 0
                     val limit =
                         call.request.queryParameters["limit"]?.toIntOrNull() ?: Constants.DEFAULT_PAGINATION_PAGE_SIZE
@@ -171,7 +232,8 @@ fun Routing.postRoute() {
             get("/{userId}") {
                 try {
                     val postsOwnerId = call.getLongParameter(name = "userId")
-                    val currentUserId = call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
+                    val currentUserId =
+                        call.getLongParameter(name = Constants.CURRENT_USER_ID_PARAMETER, isQueryParameter = true)
                     val page = call.request.queryParameters["page"]?.toIntOrNull() ?: 0
                     val limit =
                         call.request.queryParameters["limit"]?.toIntOrNull() ?: Constants.DEFAULT_PAGINATION_PAGE_SIZE

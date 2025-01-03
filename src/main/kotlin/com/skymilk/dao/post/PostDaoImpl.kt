@@ -41,6 +41,20 @@ class PostDaoImpl : PostDao {
         }
     }
 
+    override suspend fun updatePost(
+        caption: String,
+        imageUrl: String,
+        userId: Long,
+        postId: Long,
+    ): Boolean {
+        return dbQuery {
+            PostTable.update(where = { PostTable.postId eq postId }) {
+                it[PostTable.caption] = caption
+                it[PostTable.imageUrl] = imageUrl
+            } > 0
+        }
+    }
+
     override suspend fun getFeedsPost(
         userId: Long,
         follows: List<Long>,

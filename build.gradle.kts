@@ -36,6 +36,9 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
 
+    //jackson
+    testImplementation(libs.jackson.databind)
+
     //exposed
     implementation(libs.exposed.core)
     implementation(libs.exposed.jdbc)

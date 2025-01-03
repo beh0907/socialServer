@@ -2,6 +2,7 @@ package com.skymilk.repository.post
 
 import com.skymilk.model.PostParam
 import com.skymilk.model.PostResponse
+import com.skymilk.model.PostUpdateParam
 import com.skymilk.model.PostsResponse
 import com.skymilk.util.Response
 
@@ -9,6 +10,9 @@ interface PostRepository {
 
     //게시글 작성
     suspend fun createPost(imageUrl: String, params: PostParam): Response<PostResponse>
+
+    //게시글 수정
+    suspend fun updatePost(imageUrl: String, params: PostUpdateParam): Response<PostResponse>
 
     //팔로워 게시글 목록 가져오기
     suspend fun getFeedsPost(userId: Long, pageNumber: Int, pageSize: Int): Response<PostsResponse>
@@ -24,7 +28,7 @@ interface PostRepository {
     //게시글 가져오기
     suspend fun getPost(postId: Long, currentUserId: Long): Response<PostResponse>
 
-    //게시글 가져오기
+    //게시글 삭제하기
     suspend fun deletePost(postId: Long): Response<PostResponse>
 
 }

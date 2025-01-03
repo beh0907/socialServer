@@ -20,26 +20,21 @@ class PostCommentsDaoImpl : PostCommentsDao {
         postId: Long,
         content: String,
     ): PostCommentRow? {
-        return dbQuery {
-            //댓글 삽입
-            val commentId = IdGenerator.generateId()
+        val commentId = IdGenerator.generateId()
+
+        //댓글 삽입
+        val inserted = dbQuery {
             PostCommentsTable.insert {
                 it[PostCommentsTable.commentId] = commentId
                 it[PostCommentsTable.userId] = userId
                 it[PostCommentsTable.postId] = postId
                 it[PostCommentsTable.content] = content
-            }
-
-            //삽입된 댓글 리턴
-            val result = getJoinUserToPostCommentsTable().selectAll()
-                .where { (PostCommentsTable.commentId eq commentId) and (PostCommentsTable.postId eq postId) }
-                .singleOrNull()
-                ?.let {
-                    toPostCommentRow(it)
-                }
-
-            result
+            }.insertedCount > 0
         }
+
+        return if (inserted) {
+            findComment(commentId, postId)
+        } else null
     }
 
     override suspend fun removeComment(commentId: Long, postId: Long): Boolean {
