@@ -47,8 +47,8 @@ object DatabaseFactory {
             password = postgresPassword
 
             maximumPoolSize = 3
-            isAutoCommit = false
-            transactionIsolation = "TRANSACTION_REPEATABLE_READ"
+            isAutoCommit = true
+            transactionIsolation = "TRANSACTION_READ_COMMITTED"
             validate()
         }
 

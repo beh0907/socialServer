@@ -99,12 +99,14 @@ fun Routing.postRoute() {
                         //이미지라면 저장
                         is PartData.FileItem -> {
                             fileName = partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH)
+                            println("FileItem : $fileName")
                         }
 
                         //작성 데이터라면 파라미터 역직렬화
                         is PartData.FormItem -> {
                             if (partData.name == "post_data") {
                                 params = Json.decodeFromString(partData.value)
+                                println("post_data : $params")
                             }
                         }
 
@@ -134,10 +136,7 @@ fun Routing.postRoute() {
                     return@post
                 } else {
                     //게시물 갱신 후 리턴
-                    val result = repository.updatePost(imageUrl = imageUrl, params = params!!.copy(
-                        //저장된 이미지가 없다면 기존 값 반영
-                        imageUrl = if (fileName.isBlank()) params!!.imageUrl else imageUrl
-                    ))
+                    val result = repository.updatePost(imageUrl = if (fileName.isBlank()) params!!.imageUrl else imageUrl, params = params!!)
                     call.respond(
                         status = result.code,
                         message = result.data
@@ -180,6 +179,9 @@ fun Routing.postRoute() {
 
                     //게시글 삭제하기
                     val result = repository.deletePost(postId)
+
+                    println("result code : ${result.code}")
+                    println("result data : ${result.data}")
                     call.respond(status = result.code, message = result.data)
                 } catch (e: BadRequestException) {
                     call.respond(
