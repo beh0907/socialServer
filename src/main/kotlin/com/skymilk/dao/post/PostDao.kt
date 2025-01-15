@@ -3,7 +3,7 @@ package com.skymilk.dao.post
 interface PostDao {
 
     //게시글 작성
-    suspend fun createPost(caption: String, imageUrl: String, userId: Long): PostRow?
+    suspend fun createPost(caption: String, fileNames: List<String>, userId: Long): PostRow?
 
     //게시글 수정
     suspend fun updatePost(caption: String, imageUrl: String, userId: Long, postId: Long): Boolean

@@ -19,10 +19,10 @@ class PostRepositoryImpl(
 ) : PostRepository {
 
     override suspend fun createPost(
-        imageUrl: String,
+        fileNames: List<String>,
         params: PostParam,
     ): Response<PostResponse> {
-        val createdPost = postDao.createPost(caption = params.caption, imageUrl = imageUrl, userId = params.userId)
+        val createdPost = postDao.createPost(caption = params.caption, fileNames = fileNames, userId = params.userId)
 
         return if (createdPost != null) {
             Response.Success(
@@ -47,12 +47,12 @@ class PostRepositoryImpl(
     }
 
     override suspend fun updatePost(
-        imageUrl: String,
+        imageUrls: String,
         params: PostUpdateParam,
     ): Response<PostResponse> {
         val updatedPost = postDao.updatePost(
             caption = params.caption,
-            imageUrl = imageUrl,
+            imageUrl = imageUrls,
             userId = params.userId,
             postId = params.postId
         )
@@ -158,7 +158,7 @@ class PostRepositoryImpl(
         return Post(
             postId = postRow.postId,
             caption = postRow.caption,
-            imageUrl = postRow.imageUrl,
+            fileNames = postRow.fileNames,
             createdAt = postRow.createdAt,
             likesCount = postRow.likesCount,
             commentsCount = postRow.commentsCount,

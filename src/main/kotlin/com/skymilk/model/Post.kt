@@ -42,7 +42,7 @@ data class PostUpdateParam(
 data class Post(
     val postId: Long,
     val caption: String,
-    val imageUrl: String,
+    val fileNames: List<String>,
     val createdAt: String,
     val likesCount: Int,
     val commentsCount: Int,

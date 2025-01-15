@@ -35,7 +35,7 @@ fun Routing.postRoute() {
         route("/post") {
             //게시글 생성 라우트
             post("/create") {
-                var fileName = ""
+                var fileNames = arrayListOf<String>()
                 var params: PostParam? = null
                 var multiPart = call.receiveMultipart()
 
@@ -44,7 +44,8 @@ fun Routing.postRoute() {
                     when (partData) {
                         //이미지라면 저장
                         is PartData.FileItem -> {
-                            fileName = partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH)
+                            fileNames.add(partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH))
+//                            fileName = partData.saveFile(folderPath = Constants.POST_IMAGES_FOLDER_PATH)
                         }
 
                         //작성 데이터라면 파라미터 역직렬화
@@ -62,11 +63,13 @@ fun Routing.postRoute() {
                 }
 
                 //저장된 이미지 경로 설정
-                val imageUrl = "${Constants.BASE_URL}${Constants.POST_IMAGES_FOLDER}$fileName"
+//                val imageUrl = "${Constants.BASE_URL}${Constants.POST_IMAGES_FOLDER}$fileName"
 
                 //파라미터를 확인할 수 없다면 저장된 이미지 제거
                 if (params == null) {
-                    deleteFile("${Constants.POST_IMAGES_FOLDER_PATH}$/$fileName")
+                    //저장되었던 파일 삭제
+                    fileNames.forEach { deleteFile("${Constants.POST_IMAGES_FOLDER_PATH}\$/$it") }
+//                    deleteFile("${Constants.POST_IMAGES_FOLDER_PATH}$/$fileName")
 
                     call.respond(
                         status = HttpStatusCode.BadRequest,
@@ -79,7 +82,7 @@ fun Routing.postRoute() {
                     return@post
                 } else {
                     //게시물 생성 후 리턴
-                    val result = repository.createPost(imageUrl, params!!)
+                    val result = repository.createPost(fileNames, params!!)
                     call.respond(
                         status = result.code,
                         message = result.data
@@ -136,7 +139,7 @@ fun Routing.postRoute() {
                     return@post
                 } else {
                     //게시물 갱신 후 리턴
-                    val result = repository.updatePost(imageUrl = if (fileName.isBlank()) params!!.imageUrl else imageUrl, params = params!!)
+                    val result = repository.updatePost(imageUrls = if (fileName.isBlank()) params!!.imageUrl else imageUrl, params = params!!)
                     call.respond(
                         status = result.code,
                         message = result.data
@@ -212,14 +215,21 @@ fun Routing.postRoute() {
                     val limit =
                         call.request.queryParameters["limit"]?.toIntOrNull() ?: Constants.DEFAULT_PAGINATION_PAGE_SIZE
 
+                    println(11111111)
+
                     val result = repository.getFeedsPost(currentUserId, page, limit)
+                    println(222222222)
+                    println("result code : ${result.code}")
+                    println("result data : ${result.data}")
                     call.respond(status = result.code, message = result.data)
                 } catch (e: BadRequestException) {
+                    println(33333333)
                     call.respond(
                         status = HttpStatusCode.BadRequest,
                         message = Constants.MISSING_PARAMETERS_ERROR_MESSAGE
                     )
                 } catch (t: Throwable) {
+                    println(4444444444)
                     call.respond(
                         status = HttpStatusCode.InternalServerError,
                         message = PostsResponse(

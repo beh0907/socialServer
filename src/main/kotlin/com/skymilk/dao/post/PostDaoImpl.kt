@@ -17,7 +17,7 @@ import org.jetbrains.exposed.sql.update
 class PostDaoImpl : PostDao {
     override suspend fun createPost(
         caption: String,
-        imageUrl: String,
+        fileNames: List<String>,
         userId: Long,
     ): PostRow? {
         return dbQuery {
@@ -26,7 +26,7 @@ class PostDaoImpl : PostDao {
             val insertStatement = PostTable.insert {
                 it[PostTable.postId] = postId
                 it[PostTable.caption] = caption
-                it[PostTable.imageUrl] = imageUrl
+                it[PostTable.fileNames] = fileNames
                 it[likesCount] = 0
                 it[commentsCount] = 0
                 it[PostTable.userId] = userId
@@ -50,7 +50,7 @@ class PostDaoImpl : PostDao {
         return dbQuery {
             PostTable.update(where = { PostTable.postId eq postId }) {
                 it[PostTable.caption] = caption
-                it[PostTable.imageUrl] = imageUrl
+                it[PostTable.fileNames] = listOf(imageUrl)
             } > 0
         }
     }
@@ -144,7 +144,7 @@ class PostDaoImpl : PostDao {
         return PostRow(
             postId = row[PostTable.postId],
             caption = row[PostTable.caption],
-            imageUrl = row[PostTable.imageUrl],
+            fileNames = row[PostTable.fileNames],
             createdAt = row[PostTable.createdAt].toString(),
             likesCount = row[PostTable.likesCount],
             commentsCount = row[PostTable.commentsCount],
