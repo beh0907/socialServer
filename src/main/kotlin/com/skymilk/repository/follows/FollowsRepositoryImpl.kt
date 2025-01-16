@@ -111,7 +111,7 @@ class FollowsRepositoryImpl(
             id = userRow.id,
             name = userRow.name,
             bio = userRow.bio,
-            imageUrl = userRow.imageUrl,
+            imageUrl = userRow.fileName,
             isFollowing = isFollowing
         )
     }

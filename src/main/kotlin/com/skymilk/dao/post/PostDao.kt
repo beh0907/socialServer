@@ -6,7 +6,7 @@ interface PostDao {
     suspend fun createPost(caption: String, fileNames: List<String>, userId: Long): PostRow?
 
     //게시글 수정
-    suspend fun updatePost(caption: String, imageUrl: String, userId: Long, postId: Long): Boolean
+    suspend fun updatePost(caption: String, fileNames: List<String>, userId: Long, postId: Long): Boolean
 
     //팔로워 게시글 목록 가져오기
     suspend fun getFeedsPost(userId: Long, follows: List<Long>, pageNumber: Int, pageSize: Int): List<PostRow>

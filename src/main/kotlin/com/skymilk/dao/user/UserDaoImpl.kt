@@ -53,13 +53,13 @@ class UserDaoImpl : UserDao {
         userId: Long,
         name: String,
         bio: String,
-        imageUrl: String?,
+        fileName: String?,
     ): Boolean {
         return dbQuery {
             UserTable.update({ UserTable.id eq userId }) {
                 it[UserTable.name] = name
                 it[UserTable.bio] = bio
-                it[UserTable.imageUrl] = imageUrl
+                it[UserTable.fileName] = fileName
             } > 0
         }
     }
@@ -111,7 +111,7 @@ class UserDaoImpl : UserDao {
             email = row[UserTable.email],
             bio = row[UserTable.bio],
             password = row[UserTable.password],
-            imageUrl = row[UserTable.imageUrl],
+            fileName = row[UserTable.fileName],
             followersCount = row[UserTable.followersCount],
             followingCount = row[UserTable.followingCount],
         )

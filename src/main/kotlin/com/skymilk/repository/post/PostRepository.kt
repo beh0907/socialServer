@@ -12,7 +12,7 @@ interface PostRepository {
     suspend fun createPost(fileNames: List<String>, params: PostParam): Response<PostResponse>
 
     //게시글 수정
-    suspend fun updatePost(imageUrls: String, params: PostUpdateParam): Response<PostResponse>
+    suspend fun updatePost(fileNames: List<String>, params: PostUpdateParam): Response<PostResponse>
 
     //팔로워 게시글 목록 가져오기
     suspend fun getFeedsPost(userId: Long, pageNumber: Int, pageSize: Int): Response<PostsResponse>

@@ -43,14 +43,14 @@ class PostDaoImpl : PostDao {
 
     override suspend fun updatePost(
         caption: String,
-        imageUrl: String,
+        fileNames: List<String>,
         userId: Long,
         postId: Long,
     ): Boolean {
         return dbQuery {
             PostTable.update(where = { PostTable.postId eq postId }) {
                 it[PostTable.caption] = caption
-                it[PostTable.fileNames] = listOf(imageUrl)
+                it[PostTable.fileNames] = fileNames
             } > 0
         }
     }
@@ -150,7 +150,7 @@ class PostDaoImpl : PostDao {
             commentsCount = row[PostTable.commentsCount],
             userId = row[PostTable.userId],
             userName = row[UserTable.name],
-            userImageUrl = row[UserTable.imageUrl],
+            userImageFileName = row[UserTable.fileName],
         )
     }
 }

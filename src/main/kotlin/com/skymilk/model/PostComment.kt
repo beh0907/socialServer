@@ -38,6 +38,6 @@ data class PostComment(
     val postId: Long,
     val userId: Long,
     val userName: String,
-    val userImageUrl: String?,
+    val userImageFileName: String?,
     val createdAt: String,
 )

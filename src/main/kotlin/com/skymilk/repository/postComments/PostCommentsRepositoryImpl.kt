@@ -102,7 +102,7 @@ class PostCommentsRepositoryImpl(
             postId = commentRow.postId,
             userId = commentRow.userId,
             userName = commentRow.userName,
-            userImageUrl = commentRow.userImageUrl,
+            userImageFileName = commentRow.userImageFileName,
             createdAt = commentRow.createdAt,
         )
     }

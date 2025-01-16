@@ -40,7 +40,7 @@ class AuthRepositoryImpl(
                             name = insertUser.name,
                             email = insertUser.email,
                             bio = insertUser.bio,
-                            imageUrl = insertUser.imageUrl,
+                            fileName = insertUser.fileName,
                             token = generateToken(params.email),
                             followingCount = insertUser.followingCount,
                             followersCount = insertUser.followersCount
@@ -79,7 +79,7 @@ class AuthRepositoryImpl(
                             name = user.name,
                             email = user.email,
                             bio = user.bio,
-                            imageUrl = user.imageUrl,
+                            fileName = user.fileName,
                             token = generateToken(params.email),
                             followingCount = user.followingCount,
                             followersCount = user.followersCount

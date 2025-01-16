@@ -49,7 +49,7 @@ class ProfileRepositoryImpl(
                 userId = params.userId,
                 name = params.name,
                 bio = params.bio,
-                imageUrl = params.imageUrl,
+                fileName = params.fileName,
             )
 
             return if (userUpdate) Response.Success(data = ProfileResponse(success = true))
@@ -71,7 +71,7 @@ private fun toProfile(userRow: UserRow, isFollowing: Boolean, isOwnProfile: Bool
         userId = userRow.id,
         name = userRow.name,
         bio = userRow.bio,
-        imageUrl = userRow.imageUrl,
+        fileName = userRow.fileName,
         followersCount = userRow.followersCount,
         followingCount = userRow.followingCount,
         isFollowing = isFollowing,

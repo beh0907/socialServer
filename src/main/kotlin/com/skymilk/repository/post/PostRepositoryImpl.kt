@@ -47,12 +47,12 @@ class PostRepositoryImpl(
     }
 
     override suspend fun updatePost(
-        imageUrls: String,
+        addFileNames: List<String>,
         params: PostUpdateParam,
     ): Response<PostResponse> {
         val updatedPost = postDao.updatePost(
             caption = params.caption,
-            imageUrl = imageUrls,
+            fileNames = params.fileNames + addFileNames, // 기존 이미지와 새로 저장된 이미지 통합
             userId = params.userId,
             postId = params.postId
         )
@@ -163,7 +163,7 @@ class PostRepositoryImpl(
             likesCount = postRow.likesCount,
             commentsCount = postRow.commentsCount,
             userId = postRow.userId,
-            userImageUrl = postRow.userImageUrl,
+            userImageFileName = postRow.userImageFileName,
             userName = postRow.userName,
             isLiked = isPostLiked,
             isOwnPost = isOwnPost

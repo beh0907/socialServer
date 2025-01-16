@@ -26,5 +26,5 @@ data class PostRow(
     val commentsCount: Int,
     val userId: Long,
     val userName: String,
-    val userImageUrl: String?,
+    val userImageFileName: String?,
 )

@@ -93,7 +93,7 @@ class PostCommentsDaoImpl : PostCommentsDao {
             createdAt = row[PostCommentsTable.createdAt].toString(),
             userId = row[PostCommentsTable.userId],
             userName = row[UserTable.name],
-            userImageUrl = row[UserTable.imageUrl],
+            userImageFileName = row[UserTable.fileName],
             postId = row[PostCommentsTable.postId],
         )
     }

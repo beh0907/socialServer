@@ -10,13 +10,6 @@ data class PostResponse(
 )
 
 @Serializable
-data class PostUpdateResponse(
-    val success: Boolean,
-    val imageUrl: String? = null,
-    val message: String? = null,
-)
-
-@Serializable
 data class PostsResponse(
     val success: Boolean,
     val posts: List<Post> = emptyList(),
@@ -32,7 +25,7 @@ data class PostParam(
 @Serializable
 data class PostUpdateParam(
     val caption: String,
-    val imageUrl: String,
+    val fileNames: List<String>,
     val userId: Long,
     val postId: Long,
 )
@@ -48,7 +41,7 @@ data class Post(
     val commentsCount: Int,
     val userId: Long,
     val userName: String,
-    val userImageUrl: String?,
+    val userImageFileName: String?,
     val isLiked: Boolean,
     val isOwnPost: Boolean,
 )

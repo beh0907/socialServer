@@ -84,15 +84,11 @@ fun Routing.profileRoute() {
                         partData.dispose()
                     }
 
-                    //저장된 이미지 경로 설정
-                    val imageUrl = "${Constants.BASE_URL}${Constants.PROFILE_IMAGES_FOLDER}$fileName"
-
-
                     //프로필 갱신
                     val result = repository.updateUser(
                         params = params!!.copy(
                             //저장된 이미지가 없다면 기존 값 반영
-                            imageUrl = if (fileName.isEmpty()) params!!.imageUrl else imageUrl
+                            fileName = if (fileName.isEmpty()) params!!.fileName else fileName
                         )
                     )
                     call.respond(status = result.code, message = result.data)

@@ -11,7 +11,7 @@ interface UserDao {
     suspend fun findById(userId: Long): UserRow?
 
     //유저 정보 갱신
-    suspend fun updateUser(userId: Long, name: String, bio: String, imageUrl: String?): Boolean
+    suspend fun updateUser(userId: Long, name: String, bio: String, fileName: String?): Boolean
 
     //팔로우 수 갱신
     suspend fun updateFollowsCount(follower: Long, followed: Long, isFollower: Boolean): Boolean

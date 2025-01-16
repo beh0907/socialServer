@@ -8,7 +8,7 @@ data class UpdateUserParams(
     val userId: Long,
     val name: String,
     val bio: String,
-    val imageUrl: String? = null,
+    val fileName: String? = null,
 )
 
 @Serializable
@@ -16,7 +16,7 @@ data class Profile(
     val userId: Long,
     val name: String,
     val bio: String,
-    val imageUrl: String? = null,
+    val fileName: String? = null,
     val followersCount: Int = 0,
     val followingCount: Int = 0,
     val isFollowing: Boolean = false,
